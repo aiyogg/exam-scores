@@ -1,0 +1,29 @@
+{
+    "extends": "standard",
+    "plugins": [
+        "standard",
+        "promise",
+        "html"
+    ],
+    "env": {
+        "node": true,
+        "mocha": true,
+        "es6": true,
+        "browser": true,
+        "jquery": true
+    },
+    "rules": {
+        "indent": 0,
+        "eqeqeq": "warn",
+        "quotes":"warn",
+        "camelcase":"warn",
+        "one-var":"warn",
+        "comma-spacing":"warn",
+        "new-cap":"warn",
+        "spaced-comment":"warn",
+        "no-unused-vars":"warn",
+        "promise/param-names":"warn",
+        "no-new":"warn",
+        "prefer-promise-reject-errors":"warn"
+    }
+}
