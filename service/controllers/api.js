@@ -3,8 +3,9 @@
  * @author: Chuck <i@chenteng.me>
  */
 
-const request = require('request')
-// const tough = require('tough-cookie')
+const request = require('request-promise')
+const tough = require('tough-cookie')
+const _ = require('lodash')
 // const Cookie = tough.Cookie
 // const CookieJar = tough.CookieJar
 // const config = require('../config')
@@ -17,20 +18,23 @@ module.exports = {
       message: '',
       data: null
     }
-    const jar = request.jar()
+    const reqJar = request.jar()
     const reqOptions = {
       method: 'POST',
       uri: 'http://student-m.7net.cc/login',
-      jar,
+      jar: reqJar,
       formData: {
         _septnet_document: JSON.stringify({ Code: username, Pass: password })
-      }
+      },
+      resolveWithFullResponse: true
     }
+    let { body } = await request(reqOptions)
+    let loginCookies = reqJar.getCookies(reqOptions.uri)
 
-    request(reqOptions, (err, response, body) => {
-      var cookies = jar.getCookies(reqOptions.uri)
-      console.log(err, response, body, cookies)
-    })
+    if (body.split(' ')[0] === '+OK') {
+      let ticket = _.find(loginCookies, {key: '7netticket'}).value
+      result.data = { ticket }
+    }
     ctx.body = result
   }
 }
