@@ -1,21 +1,23 @@
 /**
- * @desc: 接口相关主逻辑
+ * @desc: 用户相关接口逻辑
  * @author: Chuck <i@chenteng.me>
  */
 
 const request = require('request-promise')
-const tough = require('tough-cookie')
 const _ = require('lodash')
-// const Cookie = tough.Cookie
-// const CookieJar = tough.CookieJar
 // const config = require('../config')
 
 module.exports = {
-  async userLogin (ctx) {
+  /**
+   * 登录
+   * @param {*} ctx
+   * @param {*} next
+   */
+  async userLogin (ctx, next) {
     let { username = '', password = '' } = ctx.request.body
     let result = {
       code: -1,
-      message: '',
+      msg: '',
       data: null
     }
     const reqJar = request.jar()
@@ -33,7 +35,11 @@ module.exports = {
 
     if (body.split(' ')[0] === '+OK') {
       let ticket = _.find(loginCookies, {key: '7netticket'}).value
+
+      result.code = 0
       result.data = { ticket }
+    } else {
+      result.msg = body
     }
     ctx.body = result
   }
