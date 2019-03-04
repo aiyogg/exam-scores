@@ -13,14 +13,14 @@ module.exports = {
    * @param {*} next
    */
   async examList (ctx, next) {
-    let { p = 1, l = 10 } = ctx.query
+    let { p = 1, l = 10, ticket = '' } = ctx.request.body
     let result = {
       code: -1,
       msg: '',
       data: null
     }
     const reqJar = request.jar()
-    const cookie = request.cookie('')
+    const cookie = request.cookie(`7netticket=${ticket}`)
     reqJar.setCookie(cookie, 'http://student-m.7net.cc')
     const reqOptions = {
       method: 'POST',
@@ -31,7 +31,7 @@ module.exports = {
       },
       resolveWithFullResponse: true
     }
-    let rspCookies = reqJar.getCookies(reqOptions.uri)
+    // let rspCookies = reqJar.getCookies(reqOptions.uri)
     let { body } = await request(reqOptions)
 
     if (body.split(' ')[0] === '+OK') {
@@ -46,5 +46,39 @@ module.exports = {
       result.msg = body
     }
     ctx.body = result
-  }
+  },
+  async examInfo (ctx, next) {
+    const { examGuid = '', ticket = '' } = ctx.request.body
+    let result = {
+      code: -1,
+      msg: '',
+      data: null
+    }
+    const reqJar = request.jar()
+    const cookie = request.cookie(`7netticket=${ticket}`)
+    reqJar.setCookie(cookie, 'http://student-m.7net.cc')
+    const reqOptions = {
+      method: 'POST',
+      uri: 'http://student-m.7net.cc/scorereport/examInfo',
+      jar: reqJar,
+      formData: {
+        _septnet_document: JSON.stringify({ examGuid })
+      },
+      resolveWithFullResponse: true
+    }
+    // let rspCookies = reqJar.getCookies(reqOptions.uri)
+    let { body } = await request(reqOptions)
+    if (body.split(' ')[0] === '+OK') {
+      try {
+        const response = JSON.parse(body.substring(4))
+        result.code = 0
+        result.data = response
+      } catch (err) {
+        result.msg = 'Responses parse failed'
+      }
+    } else {
+      result.msg = body
+    }
+    ctx.body = result
+  } 
 }
