@@ -80,5 +80,5 @@ module.exports = {
       result.msg = body
     }
     ctx.body = result
-  } 
+  }
 }

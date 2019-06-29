@@ -34,7 +34,7 @@ module.exports = {
     let loginCookies = reqJar.getCookies(reqOptions.uri)
 
     if (body.split(' ')[0] === '+OK') {
-      let ticket = _.find(loginCookies, {key: '7netticket'}).value
+      let ticket = _.find(loginCookies, { key: '7netticket' }).value
 
       result.code = 0
       result.data = { ticket }
