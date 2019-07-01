@@ -3,12 +3,12 @@ import { SET_TOKEN } from '../actionTypes'
 
 export function login(params) {
   return async (dispatch) => {
-      let res = await API.login(params)
+      const res = await API.login(params)
       if (res) {
-          let { code, data } = res
+          const { code, data } = res
           if (code) {
               dispatch({
-                  type: SET_TOKEN, data: data
+                  type: SET_TOKEN, data
               })
           }
       }

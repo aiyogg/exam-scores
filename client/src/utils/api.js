@@ -1,9 +1,11 @@
 import request from '@/utils/request'
 
-export const login = data => {
+const login = (data) => {
   return request({
     url: '/login',
     method: 'post',
-    params: data
+    params: data,
   })
 }
+
+export default login
