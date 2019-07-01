@@ -3,11 +3,16 @@ import { SET_TOKEN } from '../actionTypes';
 
 const initState = state
 
-const login = (state = initState, { type, data }) => {
+const login = (prevState = initState, { type, data }) => {
     switch (type) {
         case SET_TOKEN:
-            let { ticket } = data
+            // eslint-disable-next-line no-case-declarations
+            const { ticket } = data
             localStorage.setItem('token', ticket)
-            return Object.assign({}, state, {token: ticket})
+            return {...prevState, ...{token: ticket}}
+        default:
+          return prevState
     }
 }
+
+export default login
