@@ -1,28 +1,13 @@
 import * as React from 'react'
-import { HashRouter, Route } from 'react-router-dom'
-import Loadable from 'react-loadable'
-import { connect } from 'react-redux'
+import { HashRouter } from 'react-router-dom'
+import Routers from './route'
 
-const LoadableLogin = Loadable({
-  loader: () => import('./views/login'),
-  loading: () => null
-})
-
-class APP extends React.PureComponent {
-  render() {
-    return (
-      <HashRouter>
-        <Route path="/login" component={LoadableLogin} />
-      </HashRouter>
-    )
-  }
+function APP () {
+  return (
+    <HashRouter>
+      <Routers />
+    </HashRouter>
+  )
 }
 
-const mapStateToProps = state => {
-  const { token } = state.login
-  return {
-      token
-  }
-}
-
-export default connect(mapStateToProps)(APP);
+export default APP
