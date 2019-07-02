@@ -1,23 +1,28 @@
-import React from 'react'
+import * as React from 'react'
+import { HashRouter, Route } from 'react-router-dom'
+import Loadable from 'react-loadable'
+import { connect } from 'react-redux'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const LoadableLogin = Loadable({
+  loader: () => import('./views/login'),
+  loading: () => null
+})
+
+class APP extends React.PureComponent {
+  render() {
+    return (
+      <HashRouter>
+        <Route path="/login" component={LoadableLogin} />
+      </HashRouter>
+    )
+  }
 }
 
-export default App;
+const mapStateToProps = state => {
+  const { token } = state.login
+  return {
+      token
+  }
+}
+
+export default connect(mapStateToProps)(APP);

@@ -44,6 +44,7 @@ module.exports = {
     "jsx-a11y/click-events-have-key-events": 0,
     "prefer-destructuring": "off",
     "react/prefer-stateless-function": "warn",
-    "import/prefer-default-export": "off"
+    "import/prefer-default-export": "off",
+    "react/destructuring-assignment": "off"
   }
 }
