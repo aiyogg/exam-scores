@@ -8,10 +8,18 @@ const LoadableLogin = Loadable({
   loading: () => null
 })
 
+const LoadableExamList = Loadable({
+  loader: () => import('@/views/examList'),
+  loading: () => null
+})
+
 class APP extends React.PureComponent {
   render() {
     return (
-      <Route path="/login" component={LoadableLogin} />
+      <React.Fragment>
+        <Route path="/login" component={LoadableLogin} />
+        <Route path="/exam" component={LoadableExamList} />
+      </React.Fragment>
     )
   }
 }

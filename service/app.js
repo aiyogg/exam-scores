@@ -18,7 +18,7 @@ app.use(bodyParser())
 // 初始化路由中间件
 app.use(cors({
   methods: ['GET', 'HEAD', 'PUT', 'POST', 'DELETE'],
-  origin: 'http://localhost:3000'
+  origin: 'http://localhost:5000'
 }))
 app.use(routers.routes())
 app.use(routers.allowedMethods())

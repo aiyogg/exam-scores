@@ -42,37 +42,37 @@ class Login extends React.Component {
     const { getFieldProps, getFieldError } = this.props.form
     return (
       <div>
-        <WingBlank>
-          <WhiteSpace size="xl" />
-          <List
-            renderHeader={() => (<h2>用户登录</h2>)}
-            renderFooter={() => getFieldError('phone')}
+        <WhiteSpace size="xl" />
+        <List
+          renderHeader={() => (<h2>用户登录</h2>)}
+          renderFooter={() => getFieldError('phone')}
+        >
+          <InputItem
+            {...getFieldProps('username', {
+              rules: [
+                { required: true, message: '请输入手机号' },
+                { validator: this.validatePhone },
+              ]
+            })}
+            type="phone"
+            placeholder="请输入手机号"
+            error={!!getFieldError('username')}
+            onErrorClick={() => {
+              Toast.fail(getFieldError('username').join(','))
+            }}
           >
-            <InputItem
-              {...getFieldProps('username', {
-                rules: [
-                  { required: true, message: '请输入手机号' },
-                  { validator: this.validatePhone },
-                ]
-              })}
-              type="phone"
-              placeholder="请输入手机号"
-              error={!!getFieldError('username')}
-              onErrorClick={() => {
-                Toast.fail(getFieldError('username').join(','))
-              }}
-            >
-              用户名
-            </InputItem>
-            <InputItem
-              type="password"
-              {...getFieldProps('password')}
-              placeholder="请输入密码"
-            >
-              密码
-            </InputItem>
-          </List>
-          <WhiteSpace />
+            用户名
+          </InputItem>
+          <InputItem
+            type="password"
+            {...getFieldProps('password')}
+            placeholder="请输入密码"
+          >
+            密码
+          </InputItem>
+        </List>
+        <WhiteSpace />
+        <WingBlank>
           <Button type="primary" onClick={this.onSubmit}>登录</Button>
         </WingBlank>
       </div>
