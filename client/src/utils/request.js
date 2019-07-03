@@ -6,7 +6,7 @@ const error = () => {
 }
 
 const service = axios.create({
-  baseURL: 'http://localhost:3000/api',
+  baseURL: 'http://localhost:5100/api',
   timeout: 5000
 })
 
@@ -21,7 +21,7 @@ service.interceptors.request.use(
 
 // 响应拦截器
 service.interceptors.response.use(
-  respones => respones,
+  respones => respones.data,
   err => {
     error()
     return Promise.reject(err)

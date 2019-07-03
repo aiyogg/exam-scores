@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { createForm, formShape } from 'rc-form'
-import { List, InputItem, Button, WhiteSpace, WingBlank } from 'antd-mobile'
+import { List, InputItem, Button, WhiteSpace, WingBlank, Toast } from 'antd-mobile'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { login } from '@/store/actions/login'
@@ -17,26 +17,50 @@ class Login extends React.Component {
     // password: ''
   }
 
-  submit = () => {
+  onSubmit = () => {
     const { dispatchLogin } = this.props
 
     this.props.form.validateFields((error, value) => {
-      console.log(error, value);
-      dispatchLogin(value)
+      if (!error) {
+        let { username, password } = value
+        username = username.replace(/\s/g, '')
+        password = password.trim()
+        dispatchLogin({ username, password })
+      }
     });
   }
 
+  validatePhone = (rule, value, callback) => {
+    if (value && value.replace(/\s/g, '').length === 11) {
+      callback();
+    } else {
+      callback(new Error('请输入有效的手机号码'));
+    }
+  }
+
   render() {
-    const { getFieldProps } = this.props.form
+    const { getFieldProps, getFieldError } = this.props.form
     return (
       <div>
         <WingBlank>
           <WhiteSpace size="xl" />
-          <List renderHeader={() => (<h2>用户登录</h2>)}>
+          <List
+            renderHeader={() => (<h2>用户登录</h2>)}
+            renderFooter={() => getFieldError('phone')}
+          >
             <InputItem
-              {...getFieldProps('phone')}
+              {...getFieldProps('username', {
+                rules: [
+                  { required: true, message: '请输入手机号' },
+                  { validator: this.validatePhone },
+                ]
+              })}
               type="phone"
               placeholder="请输入手机号"
+              error={!!getFieldError('username')}
+              onErrorClick={() => {
+                Toast.fail(getFieldError('username').join(','))
+              }}
             >
               用户名
             </InputItem>
@@ -49,7 +73,7 @@ class Login extends React.Component {
             </InputItem>
           </List>
           <WhiteSpace />
-          <Button type="primary" onClick={this.submit}>登录</Button>
+          <Button type="primary" onClick={this.onSubmit}>登录</Button>
         </WingBlank>
       </div>
     )

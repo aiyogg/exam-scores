@@ -5,7 +5,7 @@
 
 const request = require('request-promise')
 const _ = require('lodash')
-// const config = require('../config')
+const config = require('../config')
 
 module.exports = {
   /**
@@ -23,7 +23,7 @@ module.exports = {
     const reqJar = request.jar()
     const reqOptions = {
       method: 'POST',
-      uri: 'http://student-m.7net.cc/login',
+      uri: `${config.api.baseUrl}/login`,
       jar: reqJar,
       formData: {
         _septnet_document: JSON.stringify({ Code: username, Pass: password })
@@ -38,8 +38,12 @@ module.exports = {
 
       result.code = 0
       result.data = { ticket }
+    } else if (body.split(' ')[0] === '-ERR') {
+      result.msg = body.split(' ')[1] || 'service err'
+      console.warn('user - userLogin', result.msg)
     } else {
       result.msg = body
+      console.warn('user - userLogin', body)
     }
     ctx.body = result
   }

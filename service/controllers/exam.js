@@ -5,6 +5,7 @@
 
 const request = require('request-promise')
 const _ = require('lodash')
+const config = require('../config')
 
 module.exports = {
   /**
@@ -21,10 +22,10 @@ module.exports = {
     }
     const reqJar = request.jar()
     const cookie = request.cookie(`7netticket=${ticket}`)
-    reqJar.setCookie(cookie, 'http://student-m.7net.cc')
+    reqJar.setCookie(cookie, config.api.baseUrl)
     const reqOptions = {
       method: 'POST',
-      uri: 'http://student-m.7net.cc/Exam/claimExamList',
+      uri: `${config.api.baseUrl}/Exam/claimExamList`,
       jar: reqJar,
       formData: {
         _septnet_document: JSON.stringify({ viewIndex: p, viewLength: l, score: 1 })
@@ -56,10 +57,10 @@ module.exports = {
     }
     const reqJar = request.jar()
     const cookie = request.cookie(`7netticket=${ticket}`)
-    reqJar.setCookie(cookie, 'http://student-m.7net.cc')
+    reqJar.setCookie(cookie, config.api.baseUrl)
     const reqOptions = {
       method: 'POST',
-      uri: 'http://student-m.7net.cc/scorereport/examInfo',
+      uri: `${config.api.baseUrl}/scorereport/examInfo`,
       jar: reqJar,
       formData: {
         _septnet_document: JSON.stringify({ examGuid })
