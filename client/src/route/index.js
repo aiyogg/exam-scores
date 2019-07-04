@@ -8,9 +8,12 @@ const LoadableLogin = Loadable({
   loader: () => import('@/views/login'),
   loading: () => null
 })
-
 const LoadableExamList = Loadable({
   loader: () => import('@/views/examList'),
+  loading: () => null
+})
+const LoadableExamDetail = Loadable({
+  loader: () => import('@/views/examDetail'),
   loading: () => null
 })
 
@@ -31,6 +34,7 @@ class APP extends React.PureComponent {
         <Route exact path="/" render={() => (isLogin ? <Redirect to="/exam/list" /> : <Redirect to="/login" />)} />
         <Route path="/login" component={LoadableLogin} />
         <Route path="/exam/list" component={LoadableExamList} />
+        <Route path="/exam/detail/:examid" component={LoadableExamDetail} />
         <Route exact path="/exam" render={() => <Redirect to="/exam/list" />} />
       </React.Fragment>
     )

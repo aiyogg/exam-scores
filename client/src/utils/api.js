@@ -15,3 +15,11 @@ export const getExamList = (params) => {
     params,
   })
 }
+
+export const getExamInfo = (params) => {
+  return request({
+    url: '/examInfo',
+    method: 'GET',
+    params,
+  })
+}
