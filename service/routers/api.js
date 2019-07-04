@@ -10,5 +10,6 @@ const examController = require('../controllers/exam')
 const routers = router
   .post('/login', userController.userLogin)
   .get('/examList', examController.examList)
+  .get('/examInfo', examController.examInfo)
 
 module.exports = routers
