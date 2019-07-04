@@ -1,7 +1,8 @@
 import * as React from 'react'
-import { withRouter, Route } from 'react-router-dom'
+import { withRouter, Route, Redirect } from 'react-router-dom'
 import Loadable from 'react-loadable'
 import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 
 const LoadableLogin = Loadable({
   loader: () => import('@/views/login'),
@@ -14,11 +15,23 @@ const LoadableExamList = Loadable({
 })
 
 class APP extends React.PureComponent {
+  static propTypes = {
+    token: PropTypes.string
+  }
+
+  static defaultProps = {
+    token: ''
+  }
+
   render() {
+    const isLogin = !!this.props.token
+
     return (
       <React.Fragment>
+        <Route exact path="/" render={() => (isLogin ? <Redirect to="/exam/list" /> : <Redirect to="/login" />)} />
         <Route path="/login" component={LoadableLogin} />
-        <Route path="/exam" component={LoadableExamList} />
+        <Route path="/exam/list" component={LoadableExamList} />
+        <Route exact path="/exam" render={() => <Redirect to="/exam/list" />} />
       </React.Fragment>
     )
   }

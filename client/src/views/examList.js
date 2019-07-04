@@ -1,22 +1,57 @@
 import * as React from 'react'
 import { List } from 'antd-mobile'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
+import { getExamList } from '@/store/actions/exam'
 
 const Item = List.Item
 const Brief = Item.Brief
 
 class ExamList extends React.Component {
+  static propTypes = {
+    dispatchGetExamList: PropTypes.func.isRequired,
+    token: PropTypes.string.isRequired,
+    examList: PropTypes.arrayOf(PropTypes.shape({
+      examName: PropTypes.string,
+      userExamGuid: PropTypes.string,
+      examTime: PropTypes.string,
+    })).isRequired
+  }
+
+  componentDidMount () {
+    const { dispatchGetExamList, token } = this.props
+    dispatchGetExamList({ticket: token})
+  }
+
   render() {
+    const { examList = [] } = this.props
     return (
       <div>
-        <List renderHeader={() => 'Align Vertical Center'}>
-          <Item>
-            七年级2019春期中考试（4-25）
-            <Brief>发布时间：2019年04月30日</Brief>
-          </Item>
+        <List renderHeader={() => '历次考试'}>
+          {
+            examList.map((exam) => (
+              <Item key={exam.userExamGuid}>
+                {exam.examName}
+                <Brief>{exam.examTime}</Brief>
+              </Item>
+            ))
+          }
         </List>
       </div>
     )
   }
 }
 
-export default ExamList
+const mapStateToProps = state => {
+  return {
+    examList: state.exam.examList,
+    token: state.login.token
+  }
+}
+
+const mapDispatchToProps = (dispatch) =>  ({
+  dispatchGetExamList: params => dispatch(getExamList(params))
+})
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(ExamList)

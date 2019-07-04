@@ -65,8 +65,16 @@ class Login extends React.Component {
           </InputItem>
           <InputItem
             type="password"
-            {...getFieldProps('password')}
+            {...getFieldProps('password', {
+              rules: [
+                { required: true, message: '请输入密码' },
+              ]
+            })}
             placeholder="请输入密码"
+            error={!!getFieldError('password')}
+            onErrorClick={() => {
+              Toast.fail(getFieldError('password').join(','))
+            }}
           >
             密码
           </InputItem>

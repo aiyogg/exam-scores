@@ -14,7 +14,7 @@ module.exports = {
    * @param {*} next
    */
   async examList (ctx, next) {
-    let { p = 1, l = 10, ticket = '' } = ctx.request.body
+    let { p = 1, l = 10, ticket = '' } = ctx.request.query
     let result = {
       code: -1,
       msg: '',
@@ -41,10 +41,15 @@ module.exports = {
         result.code = 0
         result.data = response
       } catch (err) {
-        result.msg = 'Responses parse failed'
+        result.msg = 'service err'
+        console.error('exam - examList', err)
       }
+    } else if (body.split(' ')[0] === '-ERR') {
+      result.msg = body.split(' ')[1] || 'service err'
+      console.warn('exam - examList', result.msg)
     } else {
       result.msg = body
+      console.warn('exam - examList', body)
     }
     ctx.body = result
   },
