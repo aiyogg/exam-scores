@@ -71,7 +71,7 @@ module.exports = {
     reqJar.setCookie(cookie, config.api.baseUrl)
     const examReqOptions = {
       method: 'POST',
-      uri: `${config.api.baseUrl}/scorereport/examInfo`,
+      uri: `${config.api.baseUrl}scorereport/examInfo`,
       jar: reqJar,
       formData: {
         _septnet_document: JSON.stringify({ examGuid })
@@ -85,7 +85,7 @@ module.exports = {
     function subjectReqFac (subject) {
       return {
         method: 'POST',
-        uri: `${config.api.baseUrl}/scorereport/subjectInfo`,
+        uri: `${config.api.baseUrl}scorereport/subjectInfo`,
         jar: reqJar,
         formData: {
           _septnet_document: JSON.stringify({ examGuid, subject })
@@ -96,30 +96,33 @@ module.exports = {
     let { body } = await request(examReqOptions)
     if (body.split(' ')[0] === '+OK') {
       try {
-        const {List: subjectList} = JSON.parse(body.substring(4))
+        const { List: subjectList } = JSON.parse(body.substring(4))
         const subjects = subjectList.map(subjectInfo => subjectInfo.kmName)
-        const subjectReps = subjectList.map((subjectInfo, i) => request(subjectReqFac(subjectInfo.kmName)))
-        const {body: subjectRes} = await Promise.all(subjectReps)
+        const subjectReps = subjects.map(subjectName => request(subjectReqFac(subjectName)))
+        const subjectRes = await Promise.all(subjectReps)
 
-        const examSubjectScores = {}
+        const examSubjectScores = []
         subjectRes.forEach((subInfo, i) => {
           let [ok, resStr] = subInfo.split(' ')
           if (ok === '+OK' && resStr) {
             const subScores = JSON.parse(resStr) || []
-            examSubjectScores[subjects[i]] = subScores.reduce((prev, curr) => ({
-              socre: prev.score + curr.myScore,
+            examSubjectScores[i] = subScores.reduce((prev, curr, idx) => ({
+              score: prev.score + curr.myScore,
               total: prev.total + curr.score
             }), {
-              socre: 0,
+              score: 0,
               total: 0
             })
+            examSubjectScores[i].subject = subjects[i]
+            const scoreRate = examSubjectScores[i].score / examSubjectScores[i].total
+            examSubjectScores[i].level = scoreRate > 0.8 ? 2 : scoreRate > 0.6 ? 1 : 0
           }
         })
         result.code = 0
         result.data = examSubjectScores
       } catch (err) {
         result.msg = 'service err'
-        console.error('exam - examList', err)
+        console.error('exam - examInfo', err)
       }
     } else if (body.split(' ')[0] === '-ERR') {
       result.msg = body.split(' ')[1] || 'service err'

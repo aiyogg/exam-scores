@@ -9,7 +9,10 @@ class Login extends React.Component {
   static propTypes = {
     // eslint-disable-next-line react/require-default-props
     form: formShape,
-    dispatchLogin: PropTypes.func.isRequired
+    dispatchLogin: PropTypes.func.isRequired,
+    history: PropTypes.shape({
+      push: PropTypes.func.isRequired
+    }).isRequired
   }
 
   state = {
@@ -25,7 +28,11 @@ class Login extends React.Component {
         let { username, password } = value
         username = username.replace(/\s/g, '')
         password = password.trim()
-        dispatchLogin({ username, password })
+        dispatchLogin({ username, password }).then(({code}) => {
+          if (code === 0) {
+            this.props.history.push('/exam')
+          }
+        })
       }
     });
   }

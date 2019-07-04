@@ -15,7 +15,10 @@ class ExamList extends React.Component {
       examName: PropTypes.string,
       userExamGuid: PropTypes.string,
       examTime: PropTypes.string,
-    })).isRequired
+    })).isRequired,
+    history: PropTypes.shape({
+      push: PropTypes.func.isRequired
+    }).isRequired
   }
 
   componentDidMount () {
@@ -30,7 +33,10 @@ class ExamList extends React.Component {
         <List renderHeader={() => '历次考试'}>
           {
             examList.map((exam) => (
-              <Item key={exam.userExamGuid}>
+              <Item 
+                key={exam.examPlanGuid}
+                onClick={() => {this.props.history.push(`/exam/detail/${exam.examPlanGuid}`) }}
+              >
                 {exam.examName}
                 <Brief>{exam.examTime}</Brief>
               </Item>
