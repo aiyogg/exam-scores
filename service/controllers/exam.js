@@ -4,7 +4,6 @@
  */
 
 const request = require('request-promise')
-const _ = require('lodash')
 const config = require('../config')
 
 module.exports = {
@@ -48,7 +47,8 @@ module.exports = {
       result.msg = body.split(' ')[1] || 'service err'
       console.warn('exam - examList', result.msg)
     } else {
-      result.msg = body
+      result.code = -9
+      result.msg = '登录超时，请重新登录'
       console.warn('exam - examList', body)
     }
     ctx.body = result
@@ -115,7 +115,7 @@ module.exports = {
             })
             examSubjectScores[i].subject = subjects[i]
             const scoreRate = examSubjectScores[i].score / examSubjectScores[i].total
-            examSubjectScores[i].level = scoreRate > 0.8 ? 2 : scoreRate > 0.6 ? 1 : 0
+            examSubjectScores[i].level = scoreRate >= 0.8 ? 2 : scoreRate >= 0.6 ? 1 : 0
           }
         })
         result.code = 0
@@ -128,7 +128,8 @@ module.exports = {
       result.msg = body.split(' ')[1] || 'service err'
       console.warn('exam - examInfo', result.msg)
     } else {
-      result.msg = body
+      result.code = -9
+      result.msg = '登录超时，请重新登录'
       console.warn('exam - examInfo', body)
     }
     ctx.body = result

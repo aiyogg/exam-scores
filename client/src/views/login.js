@@ -15,11 +15,6 @@ class Login extends React.Component {
     }).isRequired
   }
 
-  state = {
-    // username: '',
-    // password: ''
-  }
-
   onSubmit = () => {
     const { dispatchLogin } = this.props
 
@@ -48,7 +43,7 @@ class Login extends React.Component {
   render() {
     const { getFieldProps, getFieldError } = this.props.form
     return (
-      <div>
+      <div className="login-container">
         <WhiteSpace size="xl" />
         <List
           renderHeader={() => (<h2>用户登录</h2>)}

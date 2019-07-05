@@ -10,7 +10,7 @@ const Brief = Item.Brief
 class ExamList extends React.Component {
   static propTypes = {
     dispatchGetExamList: PropTypes.func.isRequired,
-    token: PropTypes.string.isRequired,
+    token: PropTypes.string,
     examList: PropTypes.arrayOf(PropTypes.shape({
       examName: PropTypes.string,
       userExamGuid: PropTypes.string,
@@ -21,9 +21,21 @@ class ExamList extends React.Component {
     }).isRequired
   }
 
+  static defaultProps = {
+    token: null
+  }
+
   componentDidMount () {
     const { dispatchGetExamList, token } = this.props
-    dispatchGetExamList({ticket: token})
+    if (token) {
+      dispatchGetExamList({ticket: token})
+    }
+  }
+
+  componentDidUpdate () {
+    if (!this.props.token) {
+      this.history.push('/login')
+    }
   }
 
   render() {

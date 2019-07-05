@@ -13,6 +13,9 @@ class ExamDetail extends React.Component {
       params: PropTypes.shape({
         examid: PropTypes.string.isRequired
       }).isRequired
+    }).isRequired,
+    history: PropTypes.shape({
+      push: PropTypes.func.isRequired
     }).isRequired
   }
 
@@ -25,8 +28,10 @@ class ExamDetail extends React.Component {
     const scores = await getExamInfo({ticket: token, examGuid: match.params.examid})
     if (scores.code === 0) {
       this.setState({tableData: scores.data})
+    } else if (scores.code === -9) {
+      Toast.fail(scores.msg, 1, () => { this.props.history.push('login') })
     } else {
-      Toast.fail(scores.msg)
+      Toast.fail(scores.msg, 1)
     }
   }
 

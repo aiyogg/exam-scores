@@ -147,6 +147,8 @@
     "eslint-plugin-import": "^2.18.0",
     "eslint-plugin-jest": "^22.7.1",
     "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-react": "^7.14.2"
+    "eslint-plugin-react": "^7.14.2",
+    "less": "^3.9.0",
+    "less-loader": "^5.0.0"
   }
 }
