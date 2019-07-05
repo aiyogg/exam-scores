@@ -6,7 +6,7 @@ const error = () => {
 }
 
 const service = axios.create({
-  baseURL: 'http://localhost:5100/api',
+  baseURL: process.env.NODE_ENV === 'production' ? 'https://score.chenteng.me/api/' : 'http://localhost:5100/api',
   timeout: 5000
 })
 
