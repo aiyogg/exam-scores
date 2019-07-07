@@ -29,7 +29,7 @@ class ExamDetail extends React.Component {
     if (scores.code === 0) {
       this.setState({tableData: scores.data})
     } else if (scores.code === -9) {
-      Toast.fail(scores.msg, 1, () => { this.props.history.push('login') })
+      Toast.fail(scores.msg, 1, () => { this.props.history.push('/login') })
     } else {
       Toast.fail(scores.msg, 1)
     }

@@ -3,6 +3,7 @@ import { List } from 'antd-mobile'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { getExamList } from '@/store/actions/exam'
+import { logout } from '@/store/actions/login'
 
 const Item = List.Item
 const Brief = Item.Brief
@@ -29,12 +30,14 @@ class ExamList extends React.Component {
     const { dispatchGetExamList, token } = this.props
     if (token) {
       dispatchGetExamList({ticket: token})
+    } else {
+      this.props.history.push('/login')
     }
   }
 
   componentDidUpdate () {
     if (!this.props.token) {
-      this.history.push('/login')
+      this.props.history.push('/login')
     }
   }
 
@@ -68,7 +71,8 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = (dispatch) =>  ({
-  dispatchGetExamList: params => dispatch(getExamList(params))
+  dispatchGetExamList: params => dispatch(getExamList(params)),
+  dispatchLogout: () => dispatch(logout())
 })
 
 
